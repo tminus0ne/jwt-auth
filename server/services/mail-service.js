@@ -22,7 +22,7 @@ class MailService {
       html: `
             <div>
                 <h1>For account activation follow this link</h1>
-                <a href="${link}"></a>
+                <a href="${link}">${link}</a>
             </div>
         `,
     });
