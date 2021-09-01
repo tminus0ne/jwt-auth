@@ -8,30 +8,31 @@ const UserDto = require('../dto/user-dto');
 
 class UserService {
   async registration(email, password) {
-    const candidate = UserModel.findOne({ email });
+    const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw new Error(`User with email ${email} already exists`);
     }
 
+    const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4();
-    const hashPassword = await bcrypt.hash(password, 5);
+
     const user = await UserModel.create({
       email,
       password: hashPassword,
       activationLink,
     });
 
-    await mailService.sendActivationMail(email, activationLink);
+    await mailService.sendActivationMail(
+      email,
+      `${process.env.API_URL}/api/activate/${activationLink}`,
+    );
 
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
 
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return {
-      ...tokens,
-      user: UserDto,
-    };
+    return { ...tokens, user: userDto };
   }
 }
 
