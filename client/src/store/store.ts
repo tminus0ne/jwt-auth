@@ -22,36 +22,39 @@ export class Store {
   async login(email: string, password: string) {
     try {
       const response = await AuthService.login(email, password);
+      console.log(response);
       localStorage.setItem('token', response.data.accessToken);
 
       this.setAuth(true);
       this.setUser(response.data.user);
     } catch (error) {
-      console.log(error.response?.data?.message);
+      console.log(error);
     }
   }
 
   async registration(email: string, password: string) {
     try {
       const response = await AuthService.registration(email, password);
+      console.log(response);
       localStorage.setItem('token', response.data.accessToken);
 
       this.setAuth(true);
       this.setUser(response.data.user);
     } catch (error) {
-      console.log(error.response?.data?.message);
+      console.log(error);
     }
   }
 
   async logout() {
     try {
       const response = await AuthService.logout();
+      console.log(response);
       localStorage.removeItem('token');
 
       this.setAuth(false);
       this.setUser({} as IUser);
     } catch (error) {
-      console.log(error.response?.data?.message);
+      console.log(error);
     }
   }
 }
