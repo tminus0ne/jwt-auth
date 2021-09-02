@@ -41,6 +41,11 @@ function App() {
           ? `User ${store.user.email} is authorized`
           : 'AUTHORIZE FOR PROCEED'}
       </h1>
+      <h2>
+        {store.user.isActivated
+          ? 'Account is activated by email'
+          : 'Account not activated'}
+      </h2>
       <button onClick={() => store.logout()}>Logout</button>
       <div>
         <button onClick={getUsers}>Show users list</button>
